@@ -366,7 +366,7 @@ sub eval_condition {
 	print "\n";
     }
     die "$usage";
-}    
+}
 
 #################################
 
@@ -452,7 +452,7 @@ sub get_uem_data {
 	$seg->{CHNL} = lc shift @fields;
 	$seg->{TBEG} = lc shift @fields;
 	$seg->{TEND} = lc shift @fields;
-        $seg->{FILE} =~ s/.*\/// if (! $keepDirectoryPath);      #strip directory 
+        $seg->{FILE} =~ s/.*\/// if (! $keepDirectoryPath);      #strip directory
         $seg->{FILE} =~ s/\.[^.]*//;   #strip file type
         $seg->{TBEG} =~ s/[^0-9\.]//g; #strip non-numeric (commas)
         $seg->{TEND} =~ s/[^0-9\.]//g; #strip non-numeric (commas)
@@ -493,7 +493,7 @@ sub get_rttm_data {
 	get_rttm_file ($data, $file, $glm);
     }
     close LIST;
-}    
+}
 
 #################################
 
@@ -777,7 +777,7 @@ sub warn_if_discarded_md_covers_scored_lexemes {
 
     my ($md, $ref_wds, $uem, $source) = @_;
     my ($wbeg, $wend, $index);
-    
+
     ($wbeg, $wend) = md_word_indices ($md, $ref_wds);
 
     for ($index=$wbeg; $index<=$wend; $index++) {
@@ -786,7 +786,7 @@ sub warn_if_discarded_md_covers_scored_lexemes {
 	warn "\nWARNING:  A $source metadata event is being deleted that covers evaluated reference LEXEMEs\n".
 	    "    (type=$md->{TYPE}, subtype=$md->{SUBT}, spkr=$md->{SPKR}, TBEG=$md->{TBEG}, TEND=$md->{TEND})\n";
 	last;
-    }	
+    }
 }
 
 #################################
@@ -954,7 +954,7 @@ sub print_offset_stats {
     print "           BEG:";
     for ($count=0,$i=$min; $i<-3; $i++) {
 	$count += $counts->{WBEG}{$i} if defined $counts->{WBEG}{$i};
-    }	    
+    }
     printf "%5d  ", $count if defined $count;
     print "    -  ", unless defined $count;
     for ($i=-3; $i<=3; $i++) {
@@ -964,14 +964,14 @@ sub print_offset_stats {
     }
     for ($count=0,$i=4; $i<=$max; $i++) {
 	$count += $counts->{WBEG}{$i} if defined $counts->{WBEG}{$i};
-    }	    
+    }
     printf "%7d", $count if defined $count;
     print "      -", unless defined $count;
-    
+
     print "\n           END:";
     for ($count=0,$i=$min; $i<-3; $i++) {
 	$count += $counts->{WEND}{$i} if defined $counts->{WEND}{$i};
-    }	    
+    }
     printf "%5d  ", $count if defined $count;
     print "    -  ", unless defined $count;
     for ($i=-3; $i<=3; $i++) {
@@ -981,7 +981,7 @@ sub print_offset_stats {
     }
     for ($count=0,$i=4; $i<=$max; $i++) {
 	$count += $counts->{WEND}{$i} if defined $counts->{WEND}{$i};
-    }	    
+    }
     printf "%7d", $count if defined $count;
     print "      -", unless defined $count;
     print "\n";
@@ -1096,7 +1096,7 @@ sub standardize_word {
     my ($word, $glm) = @_;
     my (@split_word, @words, $tbeg, $tdur, $part, $new_word);
 
-    $word->{WORD} =~ lc $word->{WORD}; #lower case
+    $word->{WORD} = lc $word->{WORD}; #lower case
 
     if (defined $glm->{$word->{WORD}}) { #split glm words
 	@split_word = @{$glm->{$word->{WORD}}};
@@ -1192,27 +1192,27 @@ sub word_score {
 	return $score if #both word type and word spelling match
 	    ((   $ref_word->{WORD} eq $sys_word->{WORD} and
 		 $ref_word->{WTYP} eq $sys_word->{WTYP})
-	     
-	     or ($ref_word->{WTYP} eq "lex" and 
+
+	     or ($ref_word->{WTYP} eq "lex" and
 		 $sys_word->{WTYP} eq "frag" and
 		 ($sw = $sys_word->{WORD}, $sw =~ s/^-*|-*$//g, $sw) #make sure that $sw is non-null
 		 and ($ref_word->{WORD} =~ /$sw/))
-	     
-	     or ($ref_word->{WTYP} eq "frag" and 
+
+	     or ($ref_word->{WTYP} eq "frag" and
 		 $sys_word->{WTYP} eq "lex" and
 		 ($rw = $ref_word->{WORD}, $rw =~ s/^-*|-*$//g, $rw) #make sure that $rw is non-null
 		 and ($sys_word->{WORD} =~ /$rw/))
-	     
-	     or ($ref_word->{WTYP} eq "fp" and 
+
+	     or ($ref_word->{WTYP} eq "fp" and
 		 $sys_word->{WTYP} eq "fp")
-	     
-	     or ($ref_word->{WTYP} eq "frag" and 
+
+	     or ($ref_word->{WTYP} eq "frag" and
 		 $sys_word->{WTYP} eq "frag"));
-	
+
 	return $score - 0.1*max(1,ref_count($ref_word)) if #word type match, except for lex's
 	    ((   $ref_word->{WTYP} eq $sys_word->{WTYP} and
 		 $ref_word->{WTYP} ne "lex"));
-	
+
 	return $score - max(1,ref_count($ref_word),ref_count($sys_word));
     }
     $word = defined $ref_word ? $ref_word : $sys_word;
@@ -1232,7 +1232,7 @@ sub word_score {
 sub wd_err_count {
 
     my ($ref_word, $sys_word) = @_;
-    
+
     my $word_score = word_score($ref_word,$sys_word);
     return (defined $word_score and $word_score > -0.5) ? 0 : 1;
 }
@@ -1257,7 +1257,7 @@ sub ref_count {
 sub overlap {
 
     my ($ref, $sys, $tgap) = @_;
-    
+
     return 0 unless $ref and $sys;
     $tgap = 0 unless defined $tgap;
     my $tovl = (min($ref->{TEND}, $sys->{TEND}) -
@@ -1371,12 +1371,12 @@ sub adjust_sys_time_to_ref {
 
 #find the nearest left reference anchor point
     $ws1 = min($ws2, @$sys_wds-1);
-    $ws1-- while ($ws1 >= 0 and 
+    $ws1-- while ($ws1 >= 0 and
 		  ($sys_wds->[$ws1]{TBEG} > $ts or
 		   not defined $sys_wds->[$ws1]{MAPPTR}));
     if ($ws1 >= 0) {
 	$ref_wd = $sys_wds->[$ws1]{MAPPTR};
-	($ts1, $tr1) = $sys_wds->[$ws1]{TEND} > $ts ? 
+	($ts1, $tr1) = $sys_wds->[$ws1]{TEND} > $ts ?
 	    ($sys_wds->[$ws1]{TBEG}, $ref_wd->{TBEG}) :
 	    ($sys_wds->[$ws1]{TEND}, $ref_wd->{TEND});
     }
@@ -1449,7 +1449,7 @@ sub align_data {
 	    $best_score = $path_score if not defined $best_score or $best_score < $path_score;
 	}
 	$pruning_threshold = $best_score - $max_delta_score;
-	
+
 #extend paths with scores above pruning threshold
 	foreach $index (keys %{$prev_ref->{PATHS}}) {
 	    $path_score = $prev_ref->{PATHS}{$index}{SCORE} +
@@ -1566,7 +1566,7 @@ sub trace_best_path {
 	$ref->{MAPPTR} = $sys;
     }
 
-#trace the path back 
+#trace the path back
     while ($pathptr != -1) {
 	$ref = $prev_ref;
 	$path = $ref->{PATHS}{$pathptr};
@@ -1649,7 +1649,7 @@ sub print_path_score {
 	else {
 	    printf " %16.16s %-7s%8s%8s %-12.12s\n", "---", "---", "--- ", "--- ", "---";
 	}
-    }	
+    }
 }
 
 #################################
@@ -2097,7 +2097,7 @@ sub exclude_overlapping_speech_from_uem {
 	    push @events, {TYPE => "NSZ", EVENT => "END", TIME => $event->{TIME}};
 	}
     }
-	
+
 #merge noscore zones with UEM data
     foreach $uem (@$uem_data) {
 	next unless $uem->{TEND}-$uem->{TBEG} > 0;
@@ -2123,7 +2123,7 @@ sub exclude_overlapping_speech_from_uem {
 	    $evaluating = 1;
 	}
     }
-	    
+
     return $uem_ex;
 }
 
@@ -2236,7 +2236,7 @@ sub add_exclusion_zones_to_uem {
 	    $evaluating = 1;
 	}
     }
-	    
+
     return $uem_ex;
 }
 
@@ -2435,7 +2435,7 @@ sub summarize_speaker_type_performance {
     foreach $ref_type (keys %{$stats->{REF}}) {
 	$ref_tot += $stats->{REF}{$ref_type};
     }
-    
+
     foreach $ref_type ((sort keys %{$stats->{REF}}), $fa_name) {
 	printf "%-16s", $ref_type;
 	foreach $sys_type ((sort keys %{$stats->{SYS}}), $miss_name) {
@@ -2605,7 +2605,7 @@ sub display_metadata_mapping {
         my ($token, $ref, $ref_beg, $ref_end, $sys, $sys_beg, $sys_end);
 	while (@events and
 	       (not $token or
-		$token eq $events[0]->{TOKEN} or 
+		$token eq $events[0]->{TOKEN} or
 		($events[0]->{TOKEN}{MAPPTR} and
 		 $token eq $events[0]->{TOKEN}{MAPPTR}))) { # collect events to display on the same line
 	    $event = shift @events;
@@ -2641,10 +2641,10 @@ sub display_metadata_mapping {
 	    $sys_end ? (sprintf "%8.2f", $sys->{TEND}) : "";
 	    if ($md_subtypes{$sys->{TYPE}} and $ref = $sys->{MAPPTR}) {
 		my $dw = $sys_end ?
-		    ($ref->{WEND} <= $sys->{RWEND} ? 
+		    ($ref->{WEND} <= $sys->{RWEND} ?
 		     delta_metadata_error_words ("END", max($ref->{WEND}, $sys->{RWBEG}-1), $sys->{RWEND}, $ref_wds) :
 		     delta_metadata_error_words ("END", $ref->{WEND}, max($ref->{WBEG}-1, $sys->{RWEND}), $ref_wds)) :
-		    ($ref->{WBEG} <= $sys->{RWBEG} ? 
+		    ($ref->{WBEG} <= $sys->{RWBEG} ?
 		     delta_metadata_error_words ("BEG", $ref->{WBEG}, min(1+$ref->{WEND}, $sys->{RWBEG}), $ref_wds) :
 		     delta_metadata_error_words ("BEG", min($ref->{WBEG}, 1+$sys->{RWEND}), $sys->{RWBEG}, $ref_wds));
 		print " dw=$dw" if abs ($dw) > 0;
@@ -2668,20 +2668,20 @@ sub sort_events {
 
 sub weighted_bipartite_graph_match {
     my ($score) = @_;
-    
+
     my $required_precision = 1E-12;
     my $INF = 1E30;
     my (@row_mate, @col_mate, @row_dec, @col_inc);
     my (@parent_row, @unchosen_row, @slack_row, @slack);
     my ($k, $l, $row, $col, @col_min, $cost, %cost);
     my $t = 0;
-    
+
     unless (defined $score) {
 	warn "input to BGM is undefined\n";
 	return undef;
     }
     return {} if (keys %$score) == 0;
-    
+
     my @rows = sort keys %{$score};
     my $miss = "miss";
     $miss .= "0" while exists $score->{$miss};
@@ -2727,13 +2727,13 @@ sub weighted_bipartite_graph_match {
 	    $col_min[$l] = $val if $val < $col_min[$l];
 	}
     }
-    
+
     # initial stage
     for ($l=0; $l<$nmax; $l++) {
 	$col_inc[$l] = 0;
 	$slack[$l] = $INF;
     }
-    
+
   ROW:
     for ($k=0; $k<$nmax; $k++) {
 	$row = $k < $nrows ? $rows[$k] : undef;
@@ -2758,15 +2758,15 @@ sub weighted_bipartite_graph_match {
 	$col_mate[$k] = -1;
 	$unchosen_row[$t++] = $k;
     }
-    
+
     goto CHECK_RESULT if $t == 0;
-    
+
     my $s;
     my $unmatched = $t;
     # start stages to get the rest of the matching
     while (1) {
 	my $q = 0;
-	
+
 	while (1) {
 	    while ($q < $t) {
 		# explore node q of forest; if matching can be increased, update matching
@@ -2793,10 +2793,10 @@ sub weighted_bipartite_graph_match {
 			}
 		    }
 		}
-		
+
 		$q++;
 	    }
-	    
+
 	    # introduce a new zero into the matrix by modifying row_dec and col_inc
 	    # if the matching can be increased update matching
 	    $s = $INF;
@@ -2808,7 +2808,7 @@ sub weighted_bipartite_graph_match {
 	    for ($q = 0; $q<$t; $q++) {
 		$row_dec[$unchosen_row[$q]] += $s;
 	    }
-	    
+
 	    for ($l=0; $l<$nmax; $l++) {
 		if ($slack[$l]) {
 		    $slack[$l] -= $s;
@@ -2834,7 +2834,7 @@ sub weighted_bipartite_graph_match {
 		}
 	    }
 	}
-	
+
       UPDATE_MATCHING:  # update the matching by pairing row k with column l
 	while (1) {
 	    my $j = $col_mate[$k];
@@ -2845,10 +2845,10 @@ sub weighted_bipartite_graph_match {
 	    $k = $parent_row[$j];
 	    $l = $j;
 	}
-	
+
 	$unmatched--;
 	goto CHECK_RESULT if $unmatched == 0;
-	
+
 	$t = 0;  # get ready for another stage
 	for ($l=0; $l<$nmax; $l++) {
 	    $parent_row[$l] = -1;
@@ -2858,7 +2858,7 @@ sub weighted_bipartite_graph_match {
 	    $unchosen_row[$t++] = $k if $col_mate[$k] < 0;
 	}
     }  # next stage
-    
+
   CHECK_RESULT:  # rigorously check results before handing them back
     for ($k=0; $k<$nmax; $k++) {
 	$row = $k < $nrows ? $rows[$k] : undef;
@@ -2873,7 +2873,7 @@ sub weighted_bipartite_graph_match {
 	    }
 	}
     }
-    
+
     for ($k=0; $k<$nmax; $k++) {
 	$row = $k < $nrows ? $rows[$k] : undef;
 	$l = $col_mate[$k];
@@ -2886,7 +2886,7 @@ sub weighted_bipartite_graph_match {
 	    return undef;
 	}
     }
-    
+
     my %map;
     for ($l=0; $l<@row_mate; $l++) {
 	$k = $row_mate[$l];
